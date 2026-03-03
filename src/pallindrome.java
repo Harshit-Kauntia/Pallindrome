@@ -1,54 +1,58 @@
 import java.util.Scanner;
 
-/**
- * UC8: Linked List Based Palindrome Checker
- * Demonstrates the Fast/Slow pointer technique and In-Place Reversal.
- */
 public class pallindrome{
 
-        public static void main(String[] args) {
-            Scanner scanner = new Scanner(System.in);
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-            System.out.println("==============================================");
-            System.out.println("      UC9: Recursive Palindrome Checker       ");
-            System.out.println("==============================================");
+        System.out.println("==============================================");
+        System.out.println("   UC10: Robust Palindrome Checker (Regex)    ");
+        System.out.println("==============================================");
 
-            System.out.print("Enter a string: ");
-            String input = scanner.nextLine();
+        System.out.print("Enter a phrase or string: ");
+        String input = scanner.nextLine();
 
-            // Sanitize: remove non-alphanumeric and convert to lowercase
-            String cleanInput = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        // Step 1: Normalize the string (Remove spaces, punctuation, and ignore case)
+        String cleanInput = normalizeString(input);
 
-            if (cleanInput.isEmpty()) {
-                System.out.println("Result: The input is empty.");
-            } else if (isPalindromeRecursive(cleanInput, 0, cleanInput.length() - 1)) {
-                System.out.println("Result: \"" + input + "\" is a palindrome.");
-            } else {
-                System.out.println("Result: \"" + input + "\" is NOT a palindrome.");
-            }
-
-            scanner.close();
+        // Step 2: Validate and display result
+        if (cleanInput.isEmpty()) {
+            System.out.println("Result: No alphanumeric characters found to check.");
+        } else if (isPalindrome(cleanInput)) {
+            System.out.println("\nOriginal: " + input);
+            System.out.println("Normalized: " + cleanInput);
+            System.out.println("Result: This is a Palindrome!");
+        } else {
+            System.out.println("\nResult: This is NOT a Palindrome.");
         }
 
-        /**
-         * Recursive function to check palindrome.
-         * @param str The cleaned string.
-         * @param start The current left-side index.
-         * @param end The current right-side index.
-         * @return true if palindrome, false otherwise.
-         */
-        public static boolean isPalindromeRecursive(String str, int start, int end) {
-            // Base Condition 1: If pointers meet or cross, we've checked everything.
-            if (start >= end) {
-                return true;
-            }
+        scanner.close();
+    }
 
-            // Base Condition 2: If characters at start and end don't match.
-            if (str.charAt(start) != str.charAt(end)) {
+    /**
+     * Logic for Normalization using Regular Expressions
+     */
+    public static String normalizeString(String str) {
+        // [^a-zA-Z0-9] replaces everything that IS NOT a letter or number with ""
+        return str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+    }
+
+    /**
+     * Logic for Palindrome Check using Two-Pointer technique
+     */
+    public static boolean isPalindrome(String str) {
+        int left = 0;
+        int right = str.length() - 1;
+
+
+
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
                 return false;
             }
-
-            // Recursive Step: Move pointers inward and call again.
-            return isPalindromeRecursive(str, start + 1, end - 1);
+            left++;
+            right--;
         }
+        return true;
     }
+}
