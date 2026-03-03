@@ -1,8 +1,7 @@
 package PACKAGE_NAME;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Scanner;
-import java.util.Stack;
 
 public class pallindrome {
 
@@ -10,52 +9,44 @@ public class pallindrome {
             Scanner scanner = new Scanner(System.in);
 
             System.out.println("==============================================");
-            System.out.println("   UC6: Queue + Stack Palindrome Checker   ");
+            System.out.println("   UC7: Deque-Based Palindrome Checker      ");
             System.out.println("==============================================");
 
-            System.out.print("Enter a string to check: ");
+            System.out.print("Enter a string: ");
             String input = scanner.nextLine();
 
-            if (checkPalindrome(input)) {
-                System.out.println("\nResult: \"" + input + "\" is a Palindrome!");
+            if (isPalindrome(input)) {
+                System.out.println("Result: \"" + input + "\" is a palindrome.");
             } else {
-                System.out.println("\nResult: \"" + input + "\" is NOT a Palindrome.");
+                System.out.println("Result: \"" + input + "\" is NOT a palindrome.");
             }
 
             scanner.close();
         }
 
-        /**
-         * Core logic using Stack and Queue to validate palindrome status.
-         */
-        public static boolean checkPalindrome(String input) {
-            // Normalize input: remove spaces/punctuation and convert to lowercase
+        public static boolean isPalindrome(String input) {
+            // Step 1: Clean the input (lowercase and alphanumeric only)
             String cleanInput = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
 
-            // Initialize Data Structures
-            Queue<Character> queue = new LinkedList<>(); // FIFO
-            Stack<Character> stack = new Stack<>();      // LIFO
+            // Step 2: Initialize the Deque
+            Deque<Character> deque = new ArrayDeque<>();
 
-            // 1. Enqueue and Push characters
-            for (int i = 0; i < cleanInput.length(); i++) {
-                char c = cleanInput.charAt(i);
-                queue.add(c);  // Enqueue
-                stack.push(c); // Push
+            // Step 3: Insert all characters into the deque
+            for (char ch : cleanInput.toCharArray()) {
+                deque.addLast(ch);
             }
 
-            // 2. Logical Comparison
-            // As we dequeue (start to end) and pop (end to start),
-            // every character must match for it to be a palindrome.
-            while (!queue.isEmpty()) {
-                char fromQueue = queue.remove(); // Dequeue
-                char fromStack = stack.pop();    // Pop
+            // Step 4: Compare front and rear elements
+            // We continue as long as there is more than 1 character to compare
+            while (deque.size() > 1) {
+                char first = deque.removeFirst();
+                char last = deque.removeLast();
 
-                if (fromQueue != fromStack) {
-                    return false; // Mismatch found
+                if (first != last) {
+                    return false; // Not a palindrome
                 }
             }
 
-            return true;
+            return true; // If we finish, it's a palindrome
         }
     }
-
